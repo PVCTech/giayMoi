@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<head>
+	<title>Tạo giấy mời hàng loạt</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="index_files/js/jspdf.umd.min.js"></script>
+    <style>
+    	@page {
+		  size: A4; /* Hoặc size: 210mm 297mm; */
+		}
+
+		@page landscape {
+		  size: A4 landscape;
+		}
+
+		.upper-case {text-transform: uppercase;}
+		.w100 {width:100%;}
+		.textCenter {text-align: center;}
+		.textLeft {text-align: left;}
+		.textRight {text-align: right;}
+
+		#paper {
+		    border: 1px solid black; /* Tùy chọn để dễ nhìn thấy div */
+		    background-size:100% 100%; /* Làm ảnh khớp với kích thước div */
+		    background-repeat: no-repeat; /* Tránh lặp ảnh */
+		    background-position: center; /* Canh giữa ảnh */
+		}
+		
+		
+    </style>
+</head>
+<body style="font-size: 16px;">
+	<table>
+	    <tr>
+	        <td style="vertical-align:text-top;">
+	            <div id="leftBanner" style="padding:8px;background: #f2f2f2;">
+        			<script src="oop/DanhSachStyle.js?v=1"></script>
+        			<div style="display: flex;flex-wrap: nowrap;margin-top: 10px;">
+        				<input type="radio" name="xungHo" id="ong" value="Ông" onclick="$('#xungHo').text('Ông ');localStorage.setItem('xungHo', 'ong');">
+        				<label for="ong">Ông</label>
+        				<input type="radio" name="xungHo" id="ba" value="Bà" onclick="$('#xungHo').text('Bà ');localStorage.setItem('xungHo', 'ba');"><label for="ba">Bà</label>
+        				<input type="radio" name="xungHo" id="ongba" value="Ông/bà" onclick="$('#xungHo').text('Ông/bà ');localStorage.setItem('xungHo', 'ongba');" checked><label for="ongba">Ông/bà</label>
+        				<input type="radio" name="xungHo" id="trong" value="" onclick="$('#xungHo').text('');localStorage.setItem('xungHo', 'trong');"><label for="trong">trống</label>
+        			</div>
+        			<input type="text" value="-1" id="indexKhachMoi" style="display:none;">
+        			<script src="oop/DanhSachKhachMoi.js?v=1"></script>
+        			<script>
+        				var danhSachKhachMoi = new DanhSachKhachMoi();
+        			</script>
+        			<div style="border-radius: 5px; padding:8px; text-align:center;width: 120px;border: 1px solid rgba(0, 0, 0, 0.5);" onclick="inHangLoat();">Save</div>
+        		</div>
+	        </td>
+	        <td>
+	            <div id="countDown" style="font-size:22px;font-weight:bold;color:rgba(0,0,0,0.6);border-radius:50%;"></div>
+	            <div id="paper" style="border:1px solid black; width:880px; height:580px;margin-left: 30px;">
+        			<div id="review" style="border:0px solid black; margin:30px; padding:10px; width:800px;height:500px;background-size: cover;">
+        				<center>
+        					<table border="0" style="width:100%;">
+        						<tr>
+        							<td>
+        								<input type="text" style="border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" class="upper-case w100 textCenter" id="tenDonViCapTren" value="CONG TY CP TAP DOAN"><br>
+        								<input type="text" style="border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);"  class="upper-case w100 textCenter" id="tenDonVi" value="CONG TY TNHH SX VA TM ABC">
+        							</td>
+        							<td style="width:30px;">
+        							</td>
+        							<td style="width:360px;">
+        								<div class="upper-case w100 textCenter" id="ten-don-vi-cap-tren">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+        								<div class="w100 textCenter" style="font-weight: bold;" id="ten-don-vi"><u>Độc lập - Tự do - Hạnh Phúc</u></div>
+        							</td>
+        						</tr>
+        					</table>
+        					<div class="w100 textCenter">
+        						<input type="text" class="upper-case textCenter" style="margin-top: 30px;font-size: 1.8rem; font-weight:bold;width:50%;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="tieuDe" value="GIẤY MỜI">
+        						<input type="text" class="textCenter" style="font-style:italic;width:50%;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="veViec" value="Tham dự buổi lễ tổng kết HDKD năm 2024">
+        					</div>
+        
+        					<div class="w100 textLeft" style="padding-left:20px;margin-top: 30px;">
+        						<div style="margin-top: 10px;">
+        							<b>Kính mời:</b> <span id="xungHo">Ông/bà </span> <input type="text" class="upper-case" style="font-weight:bold;width:630px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="kinhMoi" value="">
+        						</div>
+        						<div style="margin-top: 10px;">
+        							<b>Tới dự:</b> <input type="text" style="width:700px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="toiDu" value="Buổi lễ tổng kêt.... ">
+        						</div>
+        						<div style="margin-top: 10px;padding-left: 10px;">
+        							<input type="text" style="width:90%;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="toiDu2" value=""><br>
+        						</div>
+        						<div style="margin-top: 10px;">
+        							<b>Thời gian:</b> <input type="text" style="width:680px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="thoiGian" value="14h00 ngày 01/01/2001 ">
+        						</div>
+        						<div style="margin-top: 10px;">
+        							<b>Địa điểm:</b> <input type="text" style="width:680px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="diaDiem" value="Số 111 đường .... ">
+        						</div>
+        						<div style="margin-top: 10px;padding-left: 10px;">
+        							<input type="text" style="width:90%;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="quanTrong" value="Sự hiện diện của Ông/bà là niềm vinh dự đối với chúng tôi"><br>
+        						</div>
+        					</div>
+        
+        					<table class="w100 textRight" style="margin-top:20px;">
+        						<tr>
+        							<td>
+        							</td>
+        							<td style="width:360px;">
+        								<center>
+        									<input type="text" style="width:100px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);font-style: italic;" id="tinh" value="Nam Định">, ngày <input type="text" style="text-align:center;width:30px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);font-style: italic;" id="ngay" value="01"> tháng <input type="text" style="text-align:center;width:30px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);font-style: italic;" id="thang" value="01"> năm <input type="text" style="width:50px;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);font-style: italic;text-align:center;" id="nam" value="2024"><br>
+        
+        									<input type="text" class="upper-case textCenter" style="width:90%;font-weight:bold;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="chucDanh" value="GIAM DOC">
+        
+        									<input type="text" class="upper-case textCenter" style="margin-top:90px;width:90%;border:0px;border-bottom: 0.3px solid rgba(0,0,0,0.3);" id="tenNguoiMoi" value="NGUYEN VAN A">
+        								</center>
+        							</td>
+        						</tr>
+        					</table>
+        
+        				</center>
+        			</div>
+        		</div>
+	        </td>
+	    </tr>
+	</table>
+
+	<script type="text/javascript">
+		
+		document.addEventListener('keyup', function (event) {
+		    const target = event.target; // Phần tử phát sinh sự kiện
+		    if (target.tagName.toLowerCase() === 'input') { // Kiểm tra xem có phải thẻ input không
+		        const id = target.id; // Lấy id của input box
+		        const value = target.value; // Lấy giá trị của input box
+		        if (id) { // Nếu input có id
+		            localStorage.setItem(id, value); // Lưu giá trị vào localStorage
+		        }
+		    }
+		});
+
+
+
+	    const inputs = document.querySelectorAll('input'); // Lấy tất cả các input
+	    inputs.forEach(input => { 
+	        const savedValue = localStorage.getItem(input.id); // Lấy giá trị từ localStorage
+	        if (savedValue !== null) { // Nếu có giá trị
+	            input.value = savedValue; // Gán lại giá trị cho input
+	        }
+	    });
+
+	    if (localStorage.getItem('xungHo') !== null)
+	    {
+	    	var xungHoId = localStorage.getItem('xungHo');
+	    	$('#xungHo').text($('#' + xungHoId).val());
+	    	document.getElementById(xungHoId).checked = true;
+	    }
+	</script>
+	<script src="oop/GiayMoi.js?v=8"></script>
+	<script>
+		danhSachStyle.select();
+	</script>
+</body>
